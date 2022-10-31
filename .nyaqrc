@@ -1,0 +1,23 @@
+[base]
+; 数据库位置；支持 ~
+database=~/.nyaq.db
+; 类别；目前只支持主类别
+category=unset
+; 整词匹配；不按空格分割关键字
+whole=no
+; 正则表达式模式；一般不建议使用
+regexp=no
+; 单词模式；使用受限正则表达式，仅为关键字两侧加上 \b
+word=no
+; 文件大小过滤器；支持单位后缀。
+size=0B:20G
+; 时间过滤器；单位：天
+recent=unset
+; 信任过滤器；缺省则全选
+trusted=unset
+; 二创过滤器；缺省则全选
+remake=unset
+; 排序方法；字段参考 README.md；ASC 为升序，DESC 为降序
+order=time:desc
+; 单页限制；范围1~80
+limit=30
