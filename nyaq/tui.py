@@ -18,7 +18,7 @@ STYLE = Style.from_dict({
 })
 
 
-def view_page(view):
+def view_page(query, view):
   # View:
   #   infohash - bytes
   #   title - str
@@ -27,7 +27,6 @@ def view_page(view):
   #   Time - int
   #   Trusted - bool/int
   #   Remake - bool/int
-
   def readable_size(size):
     units = 'BKMGT'
     index = 0
@@ -46,7 +45,7 @@ def view_page(view):
     text=(
       f'标题：{view[1]}\n'
       f'特征：{view[0].hex()}\n'
-      f'类别：{"现实生活" if (view[2] >> 4) & 0x0f else "艺术"}\n'
+      f'类别：{query.categories[view[2]]}\n'
       f'大小：{readable_size(view[3])}\n'
       f'日期：{readable_time(view[4])}\n'
       f'受信：{"是" if view[5] else "否"}\n'
@@ -57,7 +56,7 @@ def view_page(view):
   ).run()
 
 
-def page_page(results):
+def page_page(query, results):
   values = []
   for result in results:
     values.append((result, result[1]))
@@ -75,7 +74,7 @@ def page_page(results):
     if checked == None:
       break  # 已取消
     default_checked = checked
-    view_page(checked)
+    view_page(query, checked)
 
 
 def search_page(query):
@@ -119,7 +118,7 @@ def search_page(query):
     max_page = math.ceil(count_ / limit)
     if max_page == 1:
       results = query(keywords, page=1)
-      page_page(results)
+      page_page(query, results)
     else:
       values = []
       for p in range(1, max_page + 1):
@@ -139,7 +138,7 @@ def search_page(query):
           break  # 已取消
         default_page = page
         results = query(keywords, page=page)
-        page_page(results)
+        page_page(query, results)
 
 
 def modify_page(config, section):

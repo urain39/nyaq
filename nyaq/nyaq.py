@@ -123,7 +123,7 @@ def _build_query(cfgpsr, kwds=None, count_=False):
 
   # Category
   category = config_get('category', type_=int, default=-1)
-  if category in (0, 1):
+  if 0 <= category <= 15:
     cbuf.append('category >> 4 == ?')
     ebuf.append(category)
 
@@ -186,14 +186,15 @@ def _build_query(cfgpsr, kwds=None, count_=False):
 def get_query():
   cfg = _load_config()
   db = _load_database(cfg)
+  cats = dict(db.execute('SELECT * FROM categories').fetchall())
 
   # 注意：返回的 ebuf 是缓存后共享的；请尽量减少对其进行直接修改
   @functools.lru_cache(128)
-  def _build_query_(kwds, count_):
+  def build_query(kwds, count_):
     return _build_query(cfg, kwds, count_=count_)
 
   def query(kwds=None, count_=False, page=1):
-    q, ebuf, limit = _build_query_(kwds, count_=count_)
+    q, ebuf, limit = build_query(kwds, count_=count_)
     if count_:
       return db.execute(q, ebuf).fetchone()[0], limit
     assert page > 0
@@ -201,6 +202,7 @@ def get_query():
     ebuf[-1] = (page - 1) * ebuf[-2]  # offset = (page-1) * limit
     return db.execute(q, ebuf).fetchall()
   query.config = cfg
-  query.clear_cache = _build_query_.cache_clear
+  query.categories = cats  # Nyaa!
+  query.clear_cache = build_query.cache_clear
 
   return query

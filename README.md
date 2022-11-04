@@ -6,7 +6,7 @@
 -- Categories
 CREATE TABLE IF NOT EXISTS categories (
   -- 主(4bit) | 次(4bit)
-  id INTEGER PRIMARY KEY,
+  id TINYINT PRIMARY KEY,
   name TEXT UNIQUE NOT NULL
 );
 
