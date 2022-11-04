@@ -39,5 +39,6 @@ python -m nyaq
 
 - [x] 分页浏览
 - [x] 设置页面
+- [ ] 热词列表（以及补全）
 - [ ] 支持 OpenCC
-- [ ] JSON 接口（CSV风格？）
+- [ ] JSON 接口（CSV 风格？）

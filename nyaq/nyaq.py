@@ -32,7 +32,8 @@ def _load_config():
       'trusted': 'unset',
       'remake': 'unset',
       'order': 'time:desc',
-      'limit': '30'
+      'limit': '30',
+      'hotword': '0'
     }
   })
   cfgpsr.read(CONFIG_PATHS)
@@ -145,13 +146,13 @@ def _build_query(cfgpsr, kwds=None, count_=False):
   trusted = config_get('trusted', type_=bool, default=None)
   if trusted != None:
     cbuf.append('trusted == ?')
-    ebuf.append(int(trusted))
+    ebuf.append(trusted)
 
   # Remake
   remake = config_get('remake', type_=bool, default=None)
   if remake != None:
     cbuf.append('remake == ?')
-    ebuf.append(int(remake))
+    ebuf.append(remake)
 
   # ---------------------------------------------------------------------------
 
