@@ -85,21 +85,19 @@ def _build_query(cfgpsr, kwds=None, count_=False):
       factor = 1 << 40
     else:
       raise Exception('too large or too small')
-    return math.ceil(int(number) * factor)
+    return math.ceil(float(number) * factor)
 
   # ---------------------------------------------------------------------------
 
   qbuf = [
-    'SELECT * FROM torrents'
+    'SELECT count(*) FROM torrents' \
+      if count_ \
+      else 'SELECT * FROM torrents'
   ]
   cbuf = []  # 条件
   ebuf = []  # 实体
 
   # ---------------------------------------------------------------------------
-
-  # Count only
-  if count_:
-    qbuf[0] = 'SELECT count(*) FROM torrents'
 
   # Keywords
   if kwds != None:
