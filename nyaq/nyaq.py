@@ -33,7 +33,8 @@ def _load_config():
       'remake': 'unset',
       'order': 'time:desc',
       'limit': '30',
-      'hotword': '0'
+      'hotword': '0',
+      'nonword': 'yes'
     }
   })
   cfgpsr.read(CONFIG_PATHS)
@@ -115,12 +116,17 @@ def _build_query(cfgpsr, kwds=None, count_=False):
       else:
         word = config_get('word', type_=bool, default=False)
         if word:
-          assert re.match(r'^\w*$', kwd)
+          assert re.match(r'^\w*$', kwd) != None
           cbuf.append('regexp(?, title)')
           ebuf.append(fr'\b{kwd}\b')
         else:
-          cbuf.append('instr(lower(title), ?)')
-          ebuf.append(kwd.lower())
+          nonword = config_get('nonword', type_=bool, default=True)
+          if nonword and re.match(r'^[^a-z]*$', kwd, re.IGNORECASE) != None:
+            cbuf.append('instr(title, ?)')
+            ebuf.append(kwd)
+          else:
+            cbuf.append('instr(lower(title), ?)')
+            ebuf.append(kwd.lower())
 
   # Category
   category = config_get('category', type_=int, default=-1)
