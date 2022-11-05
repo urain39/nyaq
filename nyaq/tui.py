@@ -93,13 +93,13 @@ def search_page(query):
     default_keywords = keywords
     try:
       count_, limit = query(keywords, count_=True)
-    except sqlite3.OperationalError as e:
+    except (sqlite3.OperationalError, AssertionError) as e:
       message_dialog(
         title='搜索出错',
         text=(
           f'{str(e)}\n'
           '\n'
-          '试着将 base.word 设置为 yes？\n'
+          '试着将 base.regexp 或 base.word 设置为 no？\n'
           r'或者使用 \x20 ''代替空格？\n'
         ),
         ok_text='确认',

@@ -23,3 +23,5 @@ order=time:desc
 limit=30
 ; 热词；记录热门关键字的个数；0 为关闭
 hotword=0
+; 非 ASCII 优化；用于提高匹配速度
+nonascii=yes
