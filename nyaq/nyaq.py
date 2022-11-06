@@ -126,7 +126,7 @@ def _build_query(cfgpsr, kwds=None, count_=False):
             ebuf.append(kwd)
           else:
             cbuf.append('instr(lower(title), ?)')
-            ebuf.append(kwd.lower())
+            ebuf.append(kwd)
 
   # Category
   category = config_get('category', type_=int, default=-1)
@@ -200,8 +200,9 @@ def get_query():
   def build_query(kwds, count_):
     return _build_query(cfg, kwds, count_=count_)
 
-  def query(kwds=None, count_=False, page=1):
-    q, ebuf, limit = build_query(kwds, count_=count_)
+  def query(kwds='', count_=False, page=1):
+    # 注意：在这里进行优化不划算；直接转换小写就行了
+    q, ebuf, limit = build_query(kwds.lower(), count_=count_)
     if count_:
       return db.execute(q, ebuf).fetchone()[0], limit
     assert page > 0
